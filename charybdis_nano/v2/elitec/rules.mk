@@ -2,8 +2,8 @@
 #   change yes to no to disable
 #
 BOOTMAGIC_ENABLE = yes      # Enable Bootmagic Lite
-MOUSEKEY_ENABLE = no        # Mouse keys
-EXTRAKEY_ENABLE = yes       # Audio control and System control
+MOUSEKEY_ENABLE = yes       # Mouse keys
+EXTRAKEY_ENABLE = no        # Audio control and System control
 CONSOLE_ENABLE = no         # Console for debug
 COMMAND_ENABLE = no         # Commands for debug and configuration
 NKRO_ENABLE = no            # Enable N-Key Rollover
@@ -27,3 +27,6 @@ MOUSE_SHARED_EP = no # Unify multiple HID interfaces into a single Endpoint
 # Enable link-time optimization by default.  The Charybdis packs a lot of
 # features (RGB, Via, trackball) in a small atmega32u4 package.
 LTO_ENABLE = yes
+
+TRI_LAYER_ENABLE = yes
+TAP_DANCE_ENABLE = yes

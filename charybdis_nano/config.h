@@ -20,3 +20,38 @@
 
 /* Trackball angle adjustment. */
 #define ROTATIONAL_TRANSFORM_ANGLE -25
+
+/* Pointing device configuration. */
+
+// Enable use of pointing device on slave split.
+#define SPLIT_POINTING_ENABLE
+
+// Pointing device is on the right split.
+#define POINTING_DEVICE_RIGHT
+
+// Limits the frequency that the sensor is polled for motion.
+#define POINTING_DEVICE_TASK_THROTTLE_MS 1
+
+// Invert X axis on mouse reports.
+#define POINTING_DEVICE_INVERT_X
+
+/* RGB matrix support. */
+#ifdef RGB_MATRIX_ENABLE
+#    define SPLIT_TRANSPORT_MIRROR
+#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255
+#    define RGB_DISABLE_WHEN_USB_SUSPENDED
+#    define RGB_MATRIX_KEYPRESSES
+
+// Startup values.
+#    define RGB_MATRIX_DEFAULT_HUE 0
+#    define RGB_MATRIX_DEFAULT_SAT 255
+#    define RGB_MATRIX_DEFAULT_VAL 64
+
+// Rainbow swirl as startup mode.
+#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
+#    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT
+
+// Slow swirl at startup.
+#    define RGB_MATRIX_DEFAULT_SPD 32
+#endif
+
