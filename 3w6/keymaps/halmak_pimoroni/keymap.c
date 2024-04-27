@@ -216,7 +216,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             pimoroni_trackball_set_rgbw(255, 0, 0, 0);
             set_scrolling = false;
             break;
-        }
+    }
+
+    switch (get_highest_layer(state)) {
+        case _FUNCTION:
+            pimoroni_trackball_set_cpi(16000);
+            break;
+        default:
+            pimoroni_trackball_set_cpi(32000);
+    }
+
     return state;
 }
 
@@ -267,6 +276,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void keyboard_post_init_user(void) {
     pimoroni_trackball_set_rgbw(0, 0, 0, 255);
+    pimoroni_trackball_set_cpi(32000);
 }
 
 #endif
