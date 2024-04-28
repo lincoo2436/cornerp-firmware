@@ -1,0 +1,54 @@
+name: Build QMK
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set release tag
+        run: |
+          echo "TAG=`date --rfc-3339=date`" >> $GITHUB_ENV
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install QMK
+        run: |
+          export QMK_HOME=${HOME}/qmk_firmware
+          pip install --user qmk
+          qmk setup -y
+      
+      - name: Setup keyboards
+        run: |
+          rm -rd $QMK_HOME/keyboards/*
+          cp -r $GITHUB_WORKSPACE/* $HOME/qmk_firmware/keyboards/.
+          ls $QMK_HOME/keyboards
+
+      - name: Build
+        run: |
+          qmk compile -kb cornerp -km default
+          qmk compile -kb 3w6 -km halmak_pimoroni
+          qmk compile -kb sofle -km rgb_with_ind_halmak 
+          qmk compile -kb dasbob -km halmak
+          qmk compile -kb charybdis_nano -mk halmak
+          ls $HOME/qmk_firmware/.build
+      
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          files: |
+            $HOME/qmk_firmware/.build/*.hex
+            $HOME/qmk_firmware/.build/*.bin
+            $HOME/qmk_firmware/.build/*.uf2
