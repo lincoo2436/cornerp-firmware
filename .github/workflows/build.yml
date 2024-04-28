@@ -35,40 +35,25 @@ jobs:
           cp -r $GITHUB_WORKSPACE/* $QMK_HOME/keyboards/.
 
       - name: Build 3w6
-        run: |
-          ls $QMK_HOME/keyboards/3w6
-          qmk compile -kb 3w6 -km halmak_pimoroni
-          ls $QMK_HOME/.build
+        run: qmk compile -kb 3w6 -km halmak_pimoroni
 
       - name: Build charybdis_nano
-        run: |
-          ls $QMK_HOME/keyboards/charybdis_nano/elitec
-          qmk compile -kb charybdis_nano/elitec -km halmak
-          ls $QMK_HOME/.build
+        run: qmk compile -kb charybdis_nano/elitec -km halmak
           
       - name: Build cornerp
-        run: |
-          ls $QMK_HOME/keyboards/cornerp
-          qmk compile -kb cornerp -km default
-          ls $QMK_HOME/.build
+        run: qmk compile -kb cornerp -km default
 
       - name: Build dasbob
-        run: |
-          ls $QMK_HOME/keyboards/dasbob
-          qmk compile -kb dasbob -km halmak
-          ls $QMK_HOME/.build
+        run: compile -kb dasbob -km halmak
 
       - name: Build sofle
-        run: |
-          ls $QMK_HOME/keyboards/sofle
-          qmk compile -kb sofle -km rgb_with_ind_halmak 
-          ls $QMK_HOME/.build
+        run: qmk compile -kb sofle -km rgb_with_ind_halmak 
       
-      - name: Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ env.TAG }}
-          files: |
-            $QMK_HOME/.build/*.hex
-            $QMK_HOME/.build/*.bin
-            $QMK_HOME/.build/*.uf2
+          name: ${{ env.TAG }}
+          path: |
+            ${{ env.QMK_HOME }}/.build/*.hex
+            ${{ env.QMK_HOME }}/.build/*.bin
+            ${{ env.QMK_HOME }}/.build/*.uf2
