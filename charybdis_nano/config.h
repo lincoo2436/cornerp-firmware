@@ -37,6 +37,8 @@
 
 /* RGB matrix support. */
 #ifdef RGB_MATRIX_ENABLE
+#    define RGB_MATRIX_LED_COUNT 36
+#    define RGB_MATRIX_SPLIT { 18, 18 }
 #    define SPLIT_TRANSPORT_MIRROR
 #    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED

@@ -137,21 +137,17 @@ void l2_reset(tap_dance_state_t *state, void *user_data) {
 #define LST_ENT LSFT_T(KC_ENT)
 #define TD3 TD(L2_CTRL)
 #define KC_NUTL S(KC_NUHS)
-#define KC_PLUS S(KC_EQL)
-#define KC_UND S(KC_MINS)
 #define KC_NUPI S(KC_NUBS)
 #define KC_NUAT S(KC_QUOT)
 #define KC_TASK C(S(KC_ESC))
 #define KC_CAD C(A(KC_DEL))
 #define AT_BCK A(S(KC_TAB))
-#define AT_FWD A(KC_TAB))
+#define AT_FWD A(KC_TAB)
 #define TAB_BCK C(S(KC_TAB))
 #define TAB_FWD C(KC_TAB)
 #define DSK_LFT C(G(KC_LEFT))
 #define DSK_RGT C(G(KC_RIGHT))
 #define KC_EURO RALT(KC_4)
-#define KC_LCRL S(KC_LBRC)
-#define KC_RCRL S(KC_RBRC)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      /*
@@ -176,7 +172,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
             KC_S,    KC_H,    KC_N,    KC_T, KC_COMM,     KC_DOT,    KC_A,    KC_E,    KC_O,    KC_I,
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-             KTF,    KC_M,    KC_V,    KC_C, KC_SLSH,       KC_G,    KC_P,    KC_X,    KC_K,    KC_Y,
+             LTF,    KC_M,    KC_V,    KC_C, KC_SLSH,       KC_G,    KC_P,    KC_X,    KC_K,    KC_Y,
     // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
                                TD1,     TD2, LCT_SPC,    LST_ENT,     TD3
     //                   ╰───────────────────────────╯ ╰──────────────────╯
@@ -188,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
             KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    S(KC_6), S(KC_7), S(KC_8), KC_QUOT, KC_BSPC,
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-          KC_GRV, KC_NUBS, KC_MINS,  KC_EQL, KC_NUHS,    KC_NUTL, KC_PLUS,  KC_UND, KC_NUPI,  KC_DEL,
+          KC_GRV, KC_NUBS, KC_MINS,  KC_EQL, KC_NUHS,    KC_NUTL, KC_PLUS, KC_UNDS, KC_NUPI,  KC_DEL,
     // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
                            KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS
     //                   ╰───────────────────────────╯ ╰──────────────────╯
@@ -198,9 +194,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
           KC_ESC, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,    KC_QUOT,   KC_UP, KC_NUAT, KC_HOME, KC_PGUP,
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-          KC_TAB, XXXXXXX, S(KC_9), S(KC_0), KC_EURO,    KC_LEFT, KC_DOWN,KC_RIGHT,  KC_END, KC_PGDN,
+          KC_TAB, XXXXXXX, KC_LPRN, KC_RPRN, KC_EURO,    KC_LEFT, KC_DOWN,KC_RIGHT,  KC_END, KC_PGDN,
     // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-         XXXXXXX, XXXXXXX, KC_LCRL, KC_RCRL, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+         XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
     // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
                            KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS
     //                   ╰───────────────────────────╯ ╰──────────────────╯
@@ -244,11 +240,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #       define DRAGSCROLL_BUFFER_SIZE 6
 #   endif
 
+static bool set_scrolling = false;
+
 /** 
  * \brief reduce dpi when in the function layer
  */
 layer_state_t layer_state_set_user(layer_state_t state) {
-    static bool set_scrolling = false;
     switch (get_highest_layer(state)) {
         case _LOWER:
             set_scrolling = true;
@@ -272,28 +269,28 @@ layer_state_t layer_state_set_user(layer_state_t state) {
  *
  * Implement drag-scroll.
  */
-report_mout_t pointing_device_task_user(report_mouse_t* mouse_report) {
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_x = 0;
     static int16_t scroll_buffer_y = 0;
     if (set_scrolling) {
 #    ifdef CHARYBDIS_DRAGSCROLL_REVERSE_X
-        scroll_buffer_x -= mouse_report->x;
+        scroll_buffer_x -= mouse_report.x;
 #    else
-        scroll_buffer_x += mouse_report->x;
+        scroll_buffer_x += mouse_report.x;
 #    endif // CHARYBDIS_DRAGSCROLL_REVERSE_X
 #    ifdef CHARYBDIS_DRAGSCROLL_REVERSE_Y
-        scroll_buffer_y -= mouse_report->y;
+        scroll_buffer_y -= mouse_report.x;
 #    else
-        scroll_buffer_y += mouse_report->y;
+        scroll_buffer_y += mouse_report.y;
 #    endif // CHARYBDIS_DRAGSCROLL_REVERSE_Y
-        mouse_report->x = 0;
-        mouse_report->y = 0;
+        mouse_report.x = 0;
+        mouse_report.y = 0;
         if (abs(scroll_buffer_x) > DRAGSCROLL_BUFFER_SIZE) {
-            mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
+            mouse_report.h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
         }
         if (abs(scroll_buffer_y) > DRAGSCROLL_BUFFER_SIZE) {
-            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
+            mouse_report.v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_y = 0;
         }
     }
