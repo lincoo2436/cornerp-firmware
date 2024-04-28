@@ -25,7 +25,7 @@ jobs:
 
       - name: Install QMK
         run: |
-          export QMK_HOME=${HOME}/qmk_firmware
+          echo "QMK_HOME=${HOME}/qmk_firmware" >> $GITHUB_ENV
           pip install --user qmk
           qmk setup -y
       
