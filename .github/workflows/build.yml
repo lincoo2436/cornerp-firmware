@@ -32,17 +32,18 @@ jobs:
       - name: Setup keyboards
         run: |
           rm -rd $QMK_HOME/keyboards/*
-          cp -r $GITHUB_WORKSPACE/* $HOME/qmk_firmware/keyboards/.
+          cp -r $GITHUB_WORKSPACE/* $QMK_HOME/keyboards/.
           ls $QMK_HOME/keyboards
 
       - name: Build
         run: |
+          ls $QMK_HOME/keyboards
           qmk compile -kb cornerp -km default
           qmk compile -kb 3w6 -km halmak_pimoroni
           qmk compile -kb sofle -km rgb_with_ind_halmak 
           qmk compile -kb dasbob -km halmak
           qmk compile -kb charybdis_nano -mk halmak
-          ls $HOME/qmk_firmware/.build
+          ls $QMK_HOME/.build
       
       - name: Release
         uses: softprops/action-gh-release@v2
