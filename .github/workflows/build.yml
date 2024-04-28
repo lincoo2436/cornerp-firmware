@@ -44,7 +44,7 @@ jobs:
         run: qmk compile -kb cornerp -km default
 
       - name: Build dasbob
-        run: compile -kb dasbob -km halmak
+        run: qmk compile -kb dasbob -km halmak
 
       - name: Build sofle
         run: qmk compile -kb sofle -km rgb_with_ind_halmak 
