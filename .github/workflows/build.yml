@@ -33,16 +33,35 @@ jobs:
         run: |
           rm -rd $QMK_HOME/keyboards/*
           cp -r $GITHUB_WORKSPACE/* $QMK_HOME/keyboards/.
-          ls $QMK_HOME/keyboards
 
-      - name: Build
+      - name: Build 3w6
         run: |
-          ls $QMK_HOME/keyboards
-          qmk compile -kb cornerp -km default
+          ls $QMK_HOME/keyboards/3w6
           qmk compile -kb 3w6 -km halmak_pimoroni
-          qmk compile -kb sofle -km rgb_with_ind_halmak 
-          qmk compile -kb dasbob -km halmak
+          ls $QMK_HOME/.build
+
+      - name: Build charybdis_nano
+        run: |
+          ls $QMK_HOME/keyboards/charybdis_nano
           qmk compile -kb charybdis_nano -mk halmak
+          ls $QMK_HOME/.build
+          
+      - name: Build cornerp
+        run: |
+          ls $QMK_HOME/keyboards/cornerp
+          qmk compile -kb cornerp -km default
+          ls $QMK_HOME/.build
+
+      - name: Build dasbob
+        run: |
+          ls $QMK_HOME/keyboards/dasbob
+          qmk compile -kb dasbob -km halmak
+          ls $QMK_HOME/.build
+
+      - name: Build sofle
+        run: |
+          ls $QMK_HOME/keyboards/sofle
+          qmk compile -kb sofle -km rgb_with_ind_halmak 
           ls $QMK_HOME/.build
       
       - name: Release
@@ -50,6 +69,6 @@ jobs:
         with:
           tag_name: ${{ env.TAG }}
           files: |
-            $HOME/qmk_firmware/.build/*.hex
-            $HOME/qmk_firmware/.build/*.bin
-            $HOME/qmk_firmware/.build/*.uf2
+            $QMK_HOME/.build/*.hex
+            $QMK_HOME/.build/*.bin
+            $QMK_HOME/.build/*.uf2
