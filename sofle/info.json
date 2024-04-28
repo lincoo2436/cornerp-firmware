@@ -6,16 +6,13 @@
     "development_board": "elite_c",
     "usb": {
         "pid": "0x0287",
-        "vid": "0xFC32"
+        "vid": "0xFC32",
         "device_version": "0.0.1"
     },
     "features": {
         "bootmagic": true,
         "mousekey": true,
         "nkro": true,
-    },
-    "build": {
-        "lto": true
     },
     "diode_direction": "COL2ROW",
     "qmk": {
@@ -27,6 +24,13 @@
         "transport": {
             "sync": {
                 "matrix_state": true
+            }
+        },
+        "encoder": {
+            "right": {
+                "rotary": [
+                    {"pin_a": "F4", "pin_b": "F5", "resolution": 2}
+                ]
             }
         }
     },
@@ -125,15 +129,6 @@
         "rotary": [
             {"pin_a": "F5", "pin_b": "F4", "resolution": 2}
         ]
-    },
-    "split": {
-        "encoder": {
-            "right": {
-                "rotary": [
-                    {"pin_a": "F4", "pin_b": "F5", "resolution": 2}
-                ]
-            }
-        }
     },
     "layouts": {
         "LAYOUT": {
