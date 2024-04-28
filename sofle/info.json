@@ -6,21 +6,16 @@
     "development_board": "elite_c",
     "usb": {
         "pid": "0x0287",
+        "vid": "0xFC32"
         "device_version": "0.0.1"
     },
     "features": {
         "bootmagic": true,
-        "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "encoder": true,
-        "oled": true
     },
     "build": {
         "lto": true
-    },
-    "usb": {
-        "vid": "0xFC32"
     },
     "diode_direction": "COL2ROW",
     "qmk": {
