@@ -34,6 +34,9 @@ jobs:
           rm -rd $QMK_HOME/keyboards/*
           cp -r $GITHUB_WORKSPACE/* $QMK_HOME/keyboards/.
 
+      - name: Lint 3w6
+        run: qmk lint -kb 3w6
+
       - name: Build 3w6
         run: qmk compile -kb 3w6 -km default
 
