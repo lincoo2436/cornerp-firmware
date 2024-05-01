@@ -29,4 +29,3 @@ MOUSE_SHARED_EP = no # Unify multiple HID interfaces into a single Endpoint
 LTO_ENABLE = yes
 
 TRI_LAYER_ENABLE = yes
-TAP_DANCE_ENABLE = yes
