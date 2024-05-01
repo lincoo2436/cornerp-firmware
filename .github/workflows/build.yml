@@ -35,7 +35,7 @@ jobs:
           cp -r $GITHUB_WORKSPACE/* $QMK_HOME/keyboards/.
 
       - name: Build 3w6
-        run: qmk compile -kb 3w6
+        run: qmk compile -kb 3w6 -km default
 
       - name: Build charybdis_nano
         run: qmk compile -kb charybdis_nano/elitec -km halmak
