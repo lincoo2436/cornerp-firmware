@@ -229,11 +229,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #ifdef POINTING_DEVICE_ENABLE
 #   ifndef DEFAULT_DPI
-#       define DEFAULT_DPI 400
+#       define DEFAULT_DPI 360
 #   endif
 
 #   ifndef DRAGSCROLL_DPI
-#       define DRAGSCROLL_DPI 100
+#       define DRAGSCROLL_DPI 80
 #   endif
 
 #   ifndef DRAGSCROLL_BUFFER_SIZE
@@ -255,6 +255,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
 
     switch (get_highest_layer(state)) {
+        case _LOWER:
         case _FUNCTION:
             pointing_device_set_cpi(DRAGSCROLL_DPI);
             break;
@@ -273,16 +274,8 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_x = 0;
     static int16_t scroll_buffer_y = 0;
     if (set_scrolling) {
-#    ifdef CHARYBDIS_DRAGSCROLL_REVERSE_X
-        scroll_buffer_x -= mouse_report.x;
-#    else
         scroll_buffer_x += mouse_report.x;
-#    endif // CHARYBDIS_DRAGSCROLL_REVERSE_X
-#    ifdef CHARYBDIS_DRAGSCROLL_REVERSE_Y
-        scroll_buffer_y -= mouse_report.x;
-#    else
-        scroll_buffer_y += mouse_report.y;
-#    endif // CHARYBDIS_DRAGSCROLL_REVERSE_Y
+        scroll_buffer_y -= mouse_report.y;
         mouse_report.x = 0;
         mouse_report.y = 0;
         if (abs(scroll_buffer_x) > DRAGSCROLL_BUFFER_SIZE) {
