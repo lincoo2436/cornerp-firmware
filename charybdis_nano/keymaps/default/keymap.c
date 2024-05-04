@@ -267,7 +267,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_y = 0;
     if (set_scrolling) {
         scroll_buffer_x += mouse_report.x;
-        scroll_buffer_y += mouse_report.y;
+        scroll_buffer_y -= mouse_report.y;
         mouse_report.x = 0;
         mouse_report.y = 0;
         if (abs(scroll_buffer_x) > DRAGSCROLL_BUFFER_SIZE) {
