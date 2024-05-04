@@ -6,7 +6,22 @@
         "vid": "0xA8F8"
     },
     "rgb_matrix": {
-        "split_count": [18, 18]
+        "split_count": [18, 18],
+        "animations": {
+            "cycle_left_right": true
+        },
+        "default": {
+            "speed": 32,
+            "val": 64
+        },
+        "sleep": true
+    },
+    "split": {
+        "transport": {
+            "sync": {
+                "matrix_state": true
+            }
+        }
     },
     "layout_aliases": {
         "LAYOUT_charybdis_3x5": "LAYOUT"
