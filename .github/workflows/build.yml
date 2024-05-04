@@ -1,6 +1,7 @@
 name: Build QMK
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
