@@ -34,8 +34,6 @@
 
 // Invert X axis on mouse reports.
 #define POINTING_DEVICE_INVERT_X
-// Invert Y axis on mouse reports.
-#define POINTING_DEVICE_INVERT_Y
 
 /* RGB matrix support. */
 #ifdef RGB_MATRIX_ENABLE
