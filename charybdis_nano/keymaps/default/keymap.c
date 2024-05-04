@@ -285,4 +285,3 @@ void keyboard_post_init_kb(void) {
     pointing_device_set_cpi(DEFAULT_DPI);
     keyboard_post_init_user();
 }
-#endif
