@@ -150,20 +150,20 @@ void l2_reset(tap_dance_state_t *state, void *user_data) {
 #define KC_EURO RALT(KC_4)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-     /*
-      * ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
-      * │ W │ L │ R │ B │ Z │       │ ; │ Q │ U │ D │ J │
-      * ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤
-      * │ S │ H │ N │ T │ , │       │ . │ A │ E │ O │ I │
-      * ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤
-      * │ F │ M │ V │ C │ / │       │ G │ P │ X │ K │ Y │
-      * └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
-      *           ┌───┐
-      *           │ALT├───┐           ┌───┐
-      *           └───┤LOW├───┐   ┌───┤RSE│
-      *               └───│SPC│   │ENT├───┘
-      *                   └───┘   └───┘
-      */
+    /*
+     * ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+     * │ W │ L │ R │ B │ Z │       │ ; │ Q │ U │ D │ J │
+     * ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤
+     * │ S │ H │ N │ T │ , │       │ . │ A │ E │ O │ I │
+     * ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤
+     * │ F │ M │ V │ C │ / │       │ G │ P │ X │ K │ Y │
+     * └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+     *           ┌───┐
+     *           │ALT├───┐           ┌───┐
+     *           └───┤LOW├───┐   ┌───┤RSE│
+     *               └───│SPC│   │ENT├───┘
+     *                   └───┘   └───┘
+     */
 
 
     [_HALMAK] = LAYOUT(
@@ -227,18 +227,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-#ifdef POINTING_DEVICE_ENABLE
-#   ifndef DEFAULT_DPI
-#       define DEFAULT_DPI 360
-#   endif
-
-#   ifndef DRAGSCROLL_DPI
-#       define DRAGSCROLL_DPI 80
-#   endif
-
-#   ifndef DRAGSCROLL_BUFFER_SIZE
-#       define DRAGSCROLL_BUFFER_SIZE 6
-#   endif
+#define DEFAULT_DPI 400
+#define FOCUS_DPI 200
+#define DRAGSCROLL_DPI 80
+#define DRAGSCROLL_BUFFER_SIZE 6
 
 static bool set_scrolling = false;
 
@@ -249,22 +241,20 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case _LOWER:
             set_scrolling = true;
-            break;
-        default:
-            set_scrolling = false;
-    }
-
-    switch (get_highest_layer(state)) {
-        case _LOWER:
-        case _FUNCTION:
             pointing_device_set_cpi(DRAGSCROLL_DPI);
+            break;
+        case _FUNCTION:
+            set_scrolling = false;
+            pointing_device_set_cpi(FOCUS_DPI);
             break;
         default:
             pointing_device_set_cpi(DEFAULT_DPI);
+            set_scrolling = false;
     }
 
     return state;
-}          //
+}
+
 /**
  * \brief Augment the pointing device behavior.
  *
