@@ -235,7 +235,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 static bool set_scrolling = false;
 
 /** 
- * \brief reduce dpi when in the function layer
+ * \brief reduce dpi when in certain layers
+ *
+ * Less DPI when dragscrolling and in the function layer
  */
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
@@ -265,7 +267,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_y = 0;
     if (set_scrolling) {
         scroll_buffer_x += mouse_report.x;
-        scroll_buffer_y -= mouse_report.y;
+        scroll_buffer_y += mouse_report.y;
         mouse_report.x = 0;
         mouse_report.y = 0;
         if (abs(scroll_buffer_x) > DRAGSCROLL_BUFFER_SIZE) {
