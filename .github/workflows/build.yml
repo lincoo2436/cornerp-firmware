@@ -55,10 +55,13 @@ jobs:
       - name: Build sofle
         run: qmk compile -kb sofle -km rgb_with_ind_halmak 
       
+      - name: Get git short SHA
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.TAG }}
+          name: ${{ env.TAG }}-${{ env.SHORT_SHA }}
           path: |
             ${{ env.QMK_HOME }}/.build/*.hex
             ${{ env.QMK_HOME }}/.build/*.bin
