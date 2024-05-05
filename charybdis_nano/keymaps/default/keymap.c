@@ -233,14 +233,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define DRAGSCROLL_BUFFER_SIZE 6
 
 static bool set_scrolling = false;
-
+static uint8_t current_layer = _HALMAK;
 /** 
  * \brief reduce dpi when in certain layers
  *
  * Less DPI when dragscrolling and in the function layer
  */
 layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
+    current_layer = get_highest_layer(state);
+    switch (current_layer) {
         case _LOWER:
             set_scrolling = true;
             pointing_device_set_cpi(DRAGSCROLL_DPI);
@@ -257,13 +258,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-layer_state_t default_layer_state_set_user(layer_state_t state) {
-    set_scrolling = false;
-    pointing_device_set_cpi(DEFAULT_DPI);
-
-    return state;
-}
-
 /**
  * \brief Augment the pointing device behavior.
  *
@@ -272,6 +266,18 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_x = 0;
     static int16_t scroll_buffer_y = 0;
+
+    switch (current_layer) {
+        case _LOWER:
+            pointing_device_set_cpi(DRAGSCROLL_DPI);
+            break;
+        case _FUNCTION:
+            pointing_device_set_cpi(FOCUS_DPI);
+            break;
+        default:
+            pointing_device_set_cpi(DEFAULT_DPI);
+    }
+
     if (set_scrolling) {
         scroll_buffer_x += mouse_report.x;
         scroll_buffer_y -= mouse_report.y;
@@ -290,6 +296,20 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     return mouse_report;
 }
 
+bool process_record_user(uint16_t keycode, keyrecord_t *recort) {
+    switch (current_layer) {
+        case _LOWER:
+            pointing_device_set_cpi(DRAGSCROLL_DPI);
+            break;
+        case _FUNCTION:
+            pointing_device_set_cpi(FOCUS_DPI);
+            break;
+        default:
+            pointing_device_set_cpi(DEFAULT_DPI);
+    }
+
+    return true;
+}
 void keyboard_post_init_kb(void) {
     pointing_device_set_cpi(DEFAULT_DPI);
     keyboard_post_init_user();
