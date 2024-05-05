@@ -257,6 +257,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+    set_scrolling = false;
+    pointing_device_set_cpi(DEFAULT_DPI);
+
+    return state;
+}
+
 /**
  * \brief Augment the pointing device behavior.
  *
