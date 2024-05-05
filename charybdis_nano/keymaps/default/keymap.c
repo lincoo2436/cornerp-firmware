@@ -244,14 +244,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (current_layer) {
         case _LOWER:
             set_scrolling = true;
-            pointing_device_set_cpi(DRAGSCROLL_DPI);
             break;
         case _FUNCTION:
             set_scrolling = false;
-            pointing_device_set_cpi(FOCUS_DPI);
             break;
         default:
-            pointing_device_set_cpi(DEFAULT_DPI);
             set_scrolling = false;
     }
 
@@ -296,20 +293,6 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     return mouse_report;
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *recort) {
-    switch (current_layer) {
-        case _LOWER:
-            pointing_device_set_cpi(DRAGSCROLL_DPI);
-            break;
-        case _FUNCTION:
-            pointing_device_set_cpi(FOCUS_DPI);
-            break;
-        default:
-            pointing_device_set_cpi(DEFAULT_DPI);
-    }
-
-    return true;
-}
 void keyboard_post_init_kb(void) {
     pointing_device_set_cpi(DEFAULT_DPI);
     keyboard_post_init_user();
