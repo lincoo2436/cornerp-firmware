@@ -18,7 +18,7 @@
 #pragma once
 
 /* Handedness. */
-#define MASTER_LEFT
+#define MASTER_RIGHT
 
 /* PMW3360 settings. */
 #define POINTING_DEVICE_CS_PIN F0

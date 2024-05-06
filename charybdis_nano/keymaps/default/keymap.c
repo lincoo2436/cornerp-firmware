@@ -86,10 +86,16 @@ void l1_finished(tap_dance_state_t *state, void *user_data) {
     l1_tap_state.state = cur_dance(state);
     switch (l1_tap_state.state) {
         case TD_SINGLE_HOLD:
-            layer_on(1);
+            layer_on(_LOWER);
             update_tri_layer(_LOWER, _RAISE, _SUPER);
             break;
-        case TD_DOUBLE: register_code(KC_LSFT); break;
+        case TD_DOUBLE:
+            register_code(KC_LSFT);
+            if (layer_state_is(_LOWER)) {
+                layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _SUPER);
+            }
+            break;
         default: break;
     }
 }
@@ -97,10 +103,16 @@ void l1_finished(tap_dance_state_t *state, void *user_data) {
 void l1_reset(tap_dance_state_t *state, void *user_data) {
     switch (l1_tap_state.state) {
         case TD_SINGLE_HOLD:
-            layer_off(1);
+            layer_off(_LOWER);
             update_tri_layer(_LOWER, _RAISE, _SUPER);
             break;
-        case TD_DOUBLE: unregister_code(KC_LSFT); break;
+        case TD_DOUBLE:
+            unregister_code(KC_LSFT);
+            if (layer_state_is(_LOWER)) {
+                layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _SUPER);
+            }
+            break;
         default: break;
     }
     l1_tap_state.state = TD_NONE;
@@ -110,10 +122,16 @@ void l2_finished(tap_dance_state_t *state, void *user_data) {
     l2_tap_state.state = cur_dance(state);
     switch (l2_tap_state.state) {
         case TD_SINGLE_HOLD:
-            layer_on(2);
+            layer_on(_RAISE);
             update_tri_layer(_LOWER, _RAISE, _SUPER);
             break;
-        case TD_DOUBLE: register_code(KC_LCTL); break;
+        case TD_DOUBLE:
+            register_code(KC_LCTL);
+            if (layer_state_is(_RAISE)) {
+                layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _SUPER);
+            }
+            break;
         default: break;
     }
 }
@@ -121,10 +139,16 @@ void l2_finished(tap_dance_state_t *state, void *user_data) {
 void l2_reset(tap_dance_state_t *state, void *user_data) {
     switch (l2_tap_state.state) {
         case TD_SINGLE_HOLD:
-            layer_off(2);
+            layer_off(_RAISE);
             update_tri_layer(_LOWER, _RAISE, _SUPER);
             break;
-        case TD_DOUBLE: unregister_code(KC_LCTL); break;
+        case TD_DOUBLE:
+            unregister_code(KC_LCTL);
+            if (layer_state_is(_RAISE)) {
+                layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _SUPER);
+            }
+            break;
         default: break;
     }
     l2_tap_state.state = TD_NONE;
@@ -244,12 +268,28 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (current_layer) {
         case _LOWER:
             set_scrolling = true;
+            if (pointing_device_get_cpi() != DRAGSCROLL_DPI) {
+                pointing_device_set_cpi(DRAGSCROLL_DPI);
+            }
             break;
         case _FUNCTION:
-            set_scrolling = false;
+            if (set_scrolling) {
+                set_scrolling = false;
+                pointing_device_set_cpi(FOCUS_DPI);
+            }
+            if (pointing_device_get_cpi() != FOCUS_DPI) {
+                pointing_device_set_cpi(FOCUS_DPI);
+            }
             break;
         default:
-            set_scrolling = false;
+            if (set_scrolling) {
+                set_scrolling = false;
+                pointing_device_set_cpi(DEFAULT_DPI);
+            }
+            if (pointing_device_get_cpi() != DEFAULT_DPI) {
+                pointing_device_set_cpi(DEFAULT_DPI);
+            }
+            break;
     }
 
     return state;
@@ -263,17 +303,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     static int16_t scroll_buffer_x = 0;
     static int16_t scroll_buffer_y = 0;
-
-    switch (current_layer) {
-        case _LOWER:
-            pointing_device_set_cpi(DRAGSCROLL_DPI);
-            break;
-        case _FUNCTION:
-            pointing_device_set_cpi(FOCUS_DPI);
-            break;
-        default:
-            pointing_device_set_cpi(DEFAULT_DPI);
-    }
 
     if (set_scrolling) {
         scroll_buffer_x += mouse_report.x;
